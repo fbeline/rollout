@@ -84,14 +84,14 @@ func TestRollout_Activate(t *testing.T) {
 	features := []Feature{Feature{"foo", 0.5, false}}
 	r := Create(features)
 	r.Activate("foo")
-	assert.Equal(t, true, r.features["foo"].active)
+	assert.Equal(t, true, r.features["foo"].Active)
 }
 
 func TestRollout_Deactivate(t *testing.T) {
 	features := []Feature{Feature{"foo", 0.5, true}}
 	r := Create(features)
 	r.Deactivate("foo")
-	assert.Equal(t, false, r.features["foo"].active)
+	assert.Equal(t, false, r.features["foo"].Active)
 }
 
 func TestRollout_Set(t *testing.T) {
