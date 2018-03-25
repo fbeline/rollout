@@ -6,9 +6,9 @@ import "math"
 // Feature struct keeps the main information of a feature as:
 // identification, the percentage of users that will be affected and status
 type Feature struct {
-	name       string
-	percentage float64
-	active     bool
+	Name       string
+	Percentage float64
+	Active     bool
 }
 
 // Rollout component struct
@@ -21,46 +21,46 @@ func (r Rollout) IsActive(feature string, id string) bool {
 	f, ok := r.features[feature]
 	crc32q := crc32.MakeTable(0xEDB88320)
 	crc32 := crc32.Checksum([]byte(id), crc32q)
-	return ok && f.percentage > math.Mod(float64(crc32), 100)
+	return ok && f.Percentage > math.Mod(float64(crc32), 100)
 }
 
 // IsFeatureActive checks if a feature is active
 func (r Rollout) IsFeatureActive(feature string) bool {
 	f, ok := r.features[feature]
-	return ok && f.active == true
+	return ok && f.Active
 }
 
 // Activate active a feature
-// if the feature does not exists it will ignore the action
+// if the feature does not exists the action is ignored
 func (r *Rollout) Activate(feature string) {
 	f, ok := r.features[feature]
 	if ok {
-		f.active = true
+		f.Active = true
 		r.Set(f)
 	}
 }
 
 // Deactivate deactivate a feature
-// if the feature does not exists it will ignore the action
+// if the feature does not exists the action is ignored
 func (r *Rollout) Deactivate(feature string) {
 	f, ok := r.features[feature]
 	if ok {
-		f.active = false
+		f.Active = false
 		r.Set(f)
 	}
 }
 
 // Set upsert a feature inside rollout component
 func (r *Rollout) Set(feature Feature) {
-	r.features[feature.name] = feature
+	r.features[feature.Name] = feature
 }
 
-// Create is factory used to create a new Rollout
+// Create is function used to create a new Rollout
 func Create(features []Feature) *Rollout {
 	r := Rollout{}
 	r.features = make(map[string]Feature)
 	for _, v := range features {
-		r.features[v.name] = v
+		r.features[v.Name] = v
 	}
 	return &r
 }
