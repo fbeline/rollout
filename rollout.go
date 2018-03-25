@@ -70,3 +70,12 @@ func (r Rollout) Get(feature string) (Feature, bool) {
 	f, ok := r.features[feature]
 	return f, ok
 }
+
+// GetAll get all features
+func (r Rollout) GetAll() []Feature {
+	var features []Feature
+	for _, el := range r.features {
+		features = append(features, el)
+	}
+	return features
+}

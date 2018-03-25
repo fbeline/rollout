@@ -145,3 +145,34 @@ func TestRollout_Get(t *testing.T) {
 		})
 	}
 }
+
+func TestRollout_GetAll(t *testing.T) {
+	var emptyFeatures []Feature
+	features := []Feature{
+		Feature{"bar", 0.5, true},
+		Feature{"foo", 0.5, false},
+	}
+	r := Create(features)
+
+	type fields struct {
+		features map[string]Feature
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   []Feature
+	}{
+		{"sanity", fields{r.features}, features},
+		{"sanity", fields{make(map[string]Feature)}, emptyFeatures},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := Rollout{
+				features: tt.fields.features,
+			}
+			if got := r.GetAll(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Rollout.GetAll() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
