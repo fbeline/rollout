@@ -31,9 +31,7 @@ var features = []rollout.Feature{foo, bar}
 var r = rollout.Create(features)
 ```
 
-### Checking if a user is in rollout
-
-`IsActive` will returns `true` if the given user is in the rollout and false if it's not.
+### Check if a feature is active for a given user
 
 ```go
 IsActive("featureName", "UserId")
