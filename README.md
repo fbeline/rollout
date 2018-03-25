@@ -1,4 +1,4 @@
-# rollout [![Build Status](https://travis-ci.org/fbeline/rollout.svg?branch=master)](https://travis-ci.org/fbeline/rollout)
+# rollout [![Build Status](https://scrutinizer-ci.com/g/fbeline/rollout/badges/build.png?b=master)](https://scrutinizer-ci.com/g/fbeline/rollout/build-status/master) [![Code Coverage](https://scrutinizer-ci.com/g/fbeline/rollout/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/fbeline/rollout/?branch=master)
 
 Feature based rollout for Golang.
 
@@ -8,12 +8,11 @@ Feature based rollout for Golang.
 
 ## Introduction
 
-This project is a small library to create feature rollout based on percentage.
-Example: You have a new feature that you wish to only 5% of your users to have access to it.
+rollout is library to create feature rollouts based on percentage.
 
-The library is free of any persistence system. But I strongly recommend to you to persist the component configuration at disk instead make it hardcoded.*
+Example: You have a new feature that you want to only 5% of your userbase to be impacted by it.
 
-*in case of a bug or the act of increasing and decreasing the percentage you could just change a file in the disk or a value in the database.
+The library is free of any persistence system, but I strongly recommend to you to persist the rollout state at disk instead make it hardcoded. In that way, you will be able to fast manipulate the rollout percentages and status.
 
 ## How to use
 
@@ -34,7 +33,7 @@ var r = rollout.Create(features)
 
 ### Checking if a user is in rollout
 
-`IsActive` will returns `true` if the given customer identification is in the rollout and false if it's not.
+`IsActive` will returns `true` if the given user is in the rollout and false if it's not.
 
 ```go
 IsActive("featureName", "UserId")
