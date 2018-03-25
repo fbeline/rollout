@@ -8,11 +8,13 @@ Feature based rollout for Golang.
 
 ## Introduction
 
-rollout is library to create feature rollouts based on percentage.
+rollout is a library used to create feature rollouts based on percentage.
 
-Example 1: You have a new project feature and you want to only 5% of your userbase to be impacted by that.
+usage examples:
 
-Example 2: A/B tests.
+- You have a new feature and you want to expose that only for 5% of your userbase.
+
+- A/B tests.
 
 The library is free of any persistence system, but I strongly recommend to you to persist the rollout state at disk instead make it hardcoded. In that way, you will be able to fast manipulate the rollout percentages and status.
 
