@@ -1,4 +1,4 @@
-# rollout
+# rollout [![Build Status](https://travis-ci.org/fbeline/rollout.svg?branch=master)](https://travis-ci.org/fbeline/rollout)
 
 Feature based rollout for Golang.
 
