@@ -64,3 +64,9 @@ func Create(features []Feature) *Rollout {
 	}
 	return &r
 }
+
+// Get a feature by name
+func (r Rollout) Get(feature string) (Feature, bool) {
+	f, ok := r.features[feature]
+	return f, ok
+}

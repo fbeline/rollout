@@ -1,6 +1,7 @@
 package rollout
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/satori/go.uuid"
@@ -107,4 +108,40 @@ func TestCreate(t *testing.T) {
 	features := []Feature{f}
 	r := Create(features)
 	assert.Equal(t, f, r.features["foo"])
+}
+
+func TestRollout_Get(t *testing.T) {
+	foo := Feature{"foo", 0.5, false}
+	features := []Feature{foo}
+	r := Create(features)
+	type fields struct {
+		features map[string]Feature
+	}
+	type args struct {
+		feature string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   Feature
+		want1  bool
+	}{
+		{"feature exists", fields{r.features}, args{"foo"}, foo, true},
+		{"feature does not exist", fields{r.features}, args{"bar"}, Feature{}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := Rollout{
+				features: tt.fields.features,
+			}
+			got, got1 := r.Get(tt.args.feature)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Rollout.Get() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("Rollout.Get() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
 }
