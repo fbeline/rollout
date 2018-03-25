@@ -31,9 +31,7 @@ var features = []rollout.Feature{foo, bar}
 var r = rollout.Create(features)
 ```
 
-### Checking if a user is in rollout
-
-`IsActive` will returns `true` if the given user is in the rollout and false if it's not.
+### Check if a feature is active for a given user
 
 ```go
 IsActive("featureName", "UserId")
@@ -45,25 +43,39 @@ The feature name is used as a unique key. If the feature exists it will be updat
 
 ```go
 var newFoo = rollout.Feature{Name: "foo", Percentage: 0.8, Active: true}
-r.Set(newFoo)
+<rollout instance>.Set(newFoo)
 ```
 
 ### Checking if a feature is active
 
 ```go
-IsFeatureActive("featureName")
+<rollout instance>.IsFeatureActive("featureName")
 ```
 
-### Activating a feature
+### Activate a feature
 
 ```go
-Activate("featureName")
+<rollout instance>.Activate("featureName")
 ```
 
-### Deactivating a feature
+### Deactivate a feature
 
 ```go
-Deactivate("featureName")
+<rollout instance>.Deactivate("featureName")
+```
+
+### Get a feature
+
+The first value (f) is assigned the value stored under the feature name.The second value (ok) is a bool that is true if the feature exists, and false if not.
+
+```go
+f, ok := <rollout instance>.Get("featureName")
+```
+
+### Get all features
+
+```go
+<rollout instance>.GetAll()
 ```
 
 ## License
