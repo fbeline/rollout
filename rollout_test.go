@@ -10,9 +10,9 @@ import (
 
 func TestRollout_IsActive(t *testing.T) {
 	features := []Feature{
-		Feature{"foo", 100, false},
-		Feature{"bar", 50, true},
-		Feature{"baz", 0, true},
+		Feature{"foo", 100, false, []string{}},
+		Feature{"bar", 50, true, []string{}},
+		Feature{"baz", 0, true, []string{"d0b7b9df"}},
 	}
 	r := Create(features)
 
@@ -33,6 +33,7 @@ func TestRollout_IsActive(t *testing.T) {
 	}{
 		{"rollout 100%", fields{r.features}, args{"foo", id.String()}, true},
 		{"rollout 0%", fields{r.features}, args{"baz", id.String()}, false},
+		{"whitelist", fields{r.features}, args{"baz", "d0b7b9df"}, true},
 		{"rollout 50% out", fields{r.features}, args{"bar", "d0b7b9df-9fa8-4f72-885b-3f1cd0d705d5"}, false},
 		{"rollout 50% int", fields{r.features}, args{"bar", "8975b460-4446-4af2-965a-ba020092e1ca"}, true},
 	}
@@ -50,8 +51,8 @@ func TestRollout_IsActive(t *testing.T) {
 
 func TestRollout_IsFeatureActive(t *testing.T) {
 	features := []Feature{
-		Feature{"foo", 0.5, false},
-		Feature{"bar", 0.5, true},
+		Feature{"foo", 0.5, false, []string{}},
+		Feature{"bar", 0.5, true, []string{}},
 	}
 	r := Create(features)
 	type fields struct {
@@ -82,36 +83,36 @@ func TestRollout_IsFeatureActive(t *testing.T) {
 }
 
 func TestRollout_Activate(t *testing.T) {
-	features := []Feature{Feature{"foo", 0.5, false}}
+	features := []Feature{Feature{"foo", 0.5, false, []string{}}}
 	r := Create(features)
 	r.Activate("foo")
 	assert.Equal(t, true, r.features["foo"].Active)
 }
 
 func TestRollout_Deactivate(t *testing.T) {
-	features := []Feature{Feature{"foo", 0.5, true}}
+	features := []Feature{Feature{"foo", 0.5, true, []string{}}}
 	r := Create(features)
 	r.Deactivate("foo")
 	assert.Equal(t, false, r.features["foo"].Active)
 }
 
 func TestRollout_Set(t *testing.T) {
-	features := []Feature{Feature{"foo", 0.5, true}}
-	expected := Feature{"foo", 0.7, true}
+	features := []Feature{Feature{"foo", 0.5, true, []string{}}}
+	expected := Feature{"foo", 0.7, true, []string{}}
 	r := Create(features)
 	r.Set(expected)
 	assert.Equal(t, expected, r.features["foo"])
 }
 
 func TestCreate(t *testing.T) {
-	f := Feature{"foo", 0.5, true}
+	f := Feature{"foo", 0.5, true, []string{}}
 	features := []Feature{f}
 	r := Create(features)
 	assert.Equal(t, f, r.features["foo"])
 }
 
 func TestRollout_Get(t *testing.T) {
-	foo := Feature{"foo", 0.5, false}
+	foo := Feature{"foo", 0.5, false, []string{}}
 	features := []Feature{foo}
 	r := Create(features)
 	type fields struct {
@@ -149,8 +150,8 @@ func TestRollout_Get(t *testing.T) {
 func TestRollout_GetAll(t *testing.T) {
 	var emptyFeatures []Feature
 	features := []Feature{
-		Feature{"bar", 0.5, true},
-		Feature{"foo", 0.5, false},
+		Feature{"bar", 0.5, true, []string{}},
+		Feature{"foo", 0.5, false, []string{}},
 	}
 	r := Create(features)
 
