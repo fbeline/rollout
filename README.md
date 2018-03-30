@@ -29,8 +29,8 @@ import "github.com/fbeline/rollout"
 ### Creating a rollout
 
 ```go
-var foo = rollout.Feature{Name: "foo", Percentage: 0.5, Active: true}
-var bar = rollout.Feature{Name: "bar", Percentage: 0.7, Active: true}
+var foo = rollout.Feature{Name: "foo", Percentage: 0.5, Active: true, Whitelist: []string{}}
+var bar = rollout.Feature{Name: "bar", Percentage: 0.7, Active: true, Whitelist: []string{}}
 var features = []rollout.Feature{foo, bar}
 var r = rollout.Create(features)
 ```

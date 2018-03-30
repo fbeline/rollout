@@ -2,6 +2,7 @@ package rollout
 
 import "hash/crc32"
 import "math"
+import "sort"
 
 // Feature struct keeps the main information of a feature as:
 // identification, the percentage of users that will be affected and status
@@ -9,6 +10,7 @@ type Feature struct {
 	Name       string
 	Percentage float64
 	Active     bool
+	Whitelist  []string
 }
 
 // Rollout component struct
@@ -21,7 +23,7 @@ func (r Rollout) IsActive(feature string, id string) bool {
 	f, ok := r.features[feature]
 	crc32q := crc32.MakeTable(0xEDB88320)
 	crc32 := crc32.Checksum([]byte(id), crc32q)
-	return ok && f.Percentage > math.Mod(float64(crc32), 100)
+	return checkWhitelist(f, id) || (ok && f.Percentage > math.Mod(float64(crc32), 100))
 }
 
 // IsFeatureActive checks if a feature is active
@@ -77,5 +79,15 @@ func (r Rollout) GetAll() []Feature {
 	for _, el := range r.features {
 		features = append(features, el)
 	}
+	sort.Slice(features, func(i, j int) bool { return features[i].Name < features[j].Name })
 	return features
+}
+
+func checkWhitelist(feature Feature, id string) bool {
+	for _, el := range feature.Whitelist {
+		if el == id {
+			return true
+		}
+	}
+	return false
 }
